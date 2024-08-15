@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Flutter3DController controller = Flutter3DController();
+  Future<PackageInfo> packageInfo = PackageInfo.fromPlatform();
+
   String? chosenAnimation;
   String? chosenTexture;
   List<String> images = [
@@ -63,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 showAppInfoDialog(context);
               },
-              icon: Icon(Icons.info))
+              icon: const Icon(Icons.info_outline))
         ],
       ),
       body: SafeArea(
@@ -94,6 +98,8 @@ class _HomePageState extends State<HomePage> {
                       child: IntrinsicWidth(
                         child: Container(
                           decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 0.5, color: Colors.black54),
                             color: Colors.white24,
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -178,31 +184,52 @@ void showAppInfoDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('About view3D'),
+        elevation: 5,
+        shadowColor: Colors.blue,
+        backgroundColor: Colors.white,
+        title: const Text('About view3D'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Version: 1.0.0'),
-            SizedBox(height: 10),
-            Text(
+            const Text("v.1.1.1"),
+            const SizedBox(height: 10),
+            const Text(
                 'view3D is an app for viewing and interacting with 3D models.'),
-            SizedBox(height: 10),
-            Text('Features:'),
-            SizedBox(height: 5),
-            Text('- Load 3D models in various formats.'),
-            Text('- Control animations and camera.'),
-            Text('- View models from different angles.'),
+            const SizedBox(height: 10),
+            const Text('Features:'),
+            const SizedBox(height: 5),
+            const Text('- Control animations and camera.'),
+            const Text('- View models from different angles.'),
+            const SizedBox(height: 15),
+            Center(
+              child: GestureDetector(
+                onTap: () async {
+                  const url = 'https://github.com/alto-b';
+                  try {
+                    // if (await canLaunchUrl(Uri.parse(url))) {
+                    // await launch(url,
+                    //     forceWebView: false, enableJavaScript: true);
+
+                    await launch(url);
+                    // } else {
+                    // print('Could not launch $url');
+                    // }
+                  } catch (e) {
+                    print('Exception occurred: $e');
+                  }
+                },
+                child: const Text(
+                  "github.com/alto-b",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Closes the dialog
-            },
-            child: Text('Close'),
-          ),
-        ],
       );
     },
   );
