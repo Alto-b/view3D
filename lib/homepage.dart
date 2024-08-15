@@ -27,37 +27,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: RichText(
-            text: TextSpan(
-              text: 'view', // First part of the text
-              style: GoogleFonts.orbitron(
-                color: Colors.grey,
-                fontSize: 25,
-                fontWeight: FontWeight.w700,
-              ),
-              children: [
-                WidgetSpan(
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => LinearGradient(
-                      colors: [Colors.blue, Colors.red],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
-                    child: Text(
-                      '3D',
-                      style: GoogleFonts.orbitron(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                        color: Colors
-                            .white, // Set this to white for the gradient to show
-                      ),
+        centerTitle: true,
+        title: RichText(
+          text: TextSpan(
+            text: 'view', // First part of the text
+            style: GoogleFonts.orbitron(
+              color: Colors.grey,
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
+            children: [
+              WidgetSpan(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Colors.blue, Colors.red],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  child: Text(
+                    '3D',
+                    style: GoogleFonts.orbitron(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: Colors
+                          .white, // Set this to white for the gradient to show
                     ),
                   ),
                 ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showAppInfoDialog(context);
+              },
+              icon: Icon(Icons.info))
+        ],
+      ),
       body: SafeArea(
         top: true,
         child: Column(
@@ -163,4 +171,39 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+void showAppInfoDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('About view3D'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Version: 1.0.0'),
+            SizedBox(height: 10),
+            Text(
+                'view3D is an app for viewing and interacting with 3D models.'),
+            SizedBox(height: 10),
+            Text('Features:'),
+            SizedBox(height: 5),
+            Text('- Load 3D models in various formats.'),
+            Text('- Control animations and camera.'),
+            Text('- View models from different angles.'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Closes the dialog
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
 }
